@@ -1,0 +1,7 @@
+{
+  "name": "water-tracking-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}
