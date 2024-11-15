@@ -140,7 +140,7 @@ export const Login: React.FC = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="NOME"
-                className="glass-input"
+                className="glass-input bg-white"
                 required
                 disabled={loading}
               />
@@ -164,7 +164,7 @@ export const Login: React.FC = () => {
                 value={formData.birthDate}
                 onChange={handleChange}
                 placeholder="DATA DE NASCIMENTO"
-                className="glass-input"
+                className="glass-input bg-white"
                 required
                 disabled={loading}
               />
@@ -176,7 +176,7 @@ export const Login: React.FC = () => {
                 value={formData.weight}
                 onChange={handleChange}
                 placeholder="SEU PESO (KG)"
-                className="glass-input"
+                className="glass-input bg-white"
                 required
                 disabled={loading}
               />
@@ -188,7 +188,7 @@ export const Login: React.FC = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="SENHA"
-                className="glass-input"
+                className="glass-input bg-white"
                 required
                 disabled={loading}
               />
@@ -200,7 +200,7 @@ export const Login: React.FC = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="REPITA A SENHA"
-                className="glass-input"
+                className="glass-input bg-white"
                 required
                 disabled={loading}
               />
@@ -217,7 +217,7 @@ export const Login: React.FC = () => {
         <div className="max-w-md mx-auto text-center">
           <div className="mb-12">
             <img 
-              src="/logo.svg" 
+              src="src/img/logo.png" 
               alt="Java-li" 
               className="w-24 h-24 mx-auto mb-8"
             />
@@ -232,7 +232,7 @@ export const Login: React.FC = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="E-MAIL"
-                className="glass-input"
+                className="glass-input bg-white"
                 required
                 disabled={loading}
               />
@@ -244,7 +244,7 @@ export const Login: React.FC = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="SENHA"
-                className="glass-input"
+                className="glass-input bg-white"
                 required
                 disabled={loading}
               />
