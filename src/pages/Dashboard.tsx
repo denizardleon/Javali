@@ -7,6 +7,7 @@ import { WaterProgress } from '../components/WaterProgress';
 import { Settings } from '../components/Settings';
 import { WaterTracker } from '../components/WaterTracker';
 import { PetStatus } from '../components/PetStatus';
+import backgroundImage from 'src/img/background.png';
 
 export const Dashboard: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
@@ -17,6 +18,7 @@ export const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const initializeDashboard = async () => {
+
       try {
         if (user?.id) {
           await loadHistory(user.id);

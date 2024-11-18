@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --primary: #40E0D0;
+  --primary: #00B4C5;
   --primary-dark: #2CC1B3;
   --secondary: #FFFFFF;
-  --background: linear-gradient(180deg, var(--primary) 0%, #87CEEB 100%);
+  --background: linear-gradient(180deg, var(--primary) 0%, #00575F 100%);
 }
 
 body {
