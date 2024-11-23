@@ -4,7 +4,7 @@ import { ChevronLeft } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/useAuthStore';
 import { AuthError } from '../components/molecules/Error/AuthError';
-import { LoadingButton } from '../components/atoms/Button/LoadingButton';
+import Button from '../components/atoms/Button/Button';
 import { Input } from '../components/atoms/Input/Input';
 import { Capy } from '../components/atoms/Images/Images';
 export const Login: React.FC = () => {
@@ -107,14 +107,13 @@ export const Login: React.FC = () => {
             </button>
           </div>
           <div className="mt-10 flex justify-center">
-            <LoadingButton
+            <Button
               type="submit"
-              loading={loading}
               className="w-[80%]"
               variant="primary"
             >
               LOGAR
-            </LoadingButton>
+            </Button>
           </div>     
 
         </form>

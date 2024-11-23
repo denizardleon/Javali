@@ -4,7 +4,7 @@ import { ChevronLeft } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/useAuthStore';
 import { AuthError } from '../components/molecules/Error/AuthError';
-import { LoadingButton } from '../components/atoms/Button/LoadingButton';
+import Button from '../components/atoms/Button/Button';
 import { Input } from '../components/atoms/Input/Input';
 import { DateInput } from '../components/atoms/Input/DateInput';
 
@@ -191,14 +191,13 @@ export const Register: React.FC = () => {
           />
 
           <div className="mt-20 flex justify-center">
-            <LoadingButton
+            <Button
               type="submit"
-              loading={loading}
               className="w-[80%]"
               variant="primary"
             >
               CRIAR CONTA
-            </LoadingButton>
+            </Button>
           </div>
         </form>
       </div>
