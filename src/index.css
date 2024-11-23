@@ -19,11 +19,10 @@
 }
 
 :root {
-  --primary: #00a5b4;
+  --primary: #40E0D0;
   --primary-dark: #2CC1B3;
   --secondary: #FFFFFF;
   --background: linear-gradient(180deg, var(--primary) 0%, #87CEEB 100%);
-  font-family: 'Bevan', serif;
 }
 
 body {
