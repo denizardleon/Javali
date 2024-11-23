@@ -1,69 +1,119 @@
-# Water Tracking App
+# Java-li 🌊
 
-Um aplicativo para acompanhamento de ingestão de água com pet virtual.
+App moderno para acompanhamento do consumo diário de água, com um companheiro virtual que te ajuda a manter o hábito de hidratação.
 
-## Requisitos
+## 🌟 Funcionalidades
 
-- Node.js 18+
-- NPM 9+
-- Conta no Supabase
+- **Acompanhamento de Água**
+  - Registro fácil do consumo de água
+  - Visualização do progresso diário
+  - Meta diária personalizável
+  - Volume do copo personalizável
+  - Histórico de consumo
 
-## Dependências Principais
+- **Pet Virtual**
+  - Escolha entre Capivara ou Gato como seu companheiro
+  - Acompanha seu progresso e reage ao seu consumo de água
+  - Animações interativas
 
-- React 18.3.1
-- React Router DOM 6.22.2
-- Supabase JS 2.39.7
-- Zustand 4.5.2
-- Date-fns 3.3.1
-- Lucide React 0.344.0
+- **Interface Moderna**
+  - Design responsivo e intuitivo
+  - Animações suaves
+  - Tema com gradientes em tons de azul
+  - Componentes reutilizáveis
 
-## Dependências de Desenvolvimento
+## 🛠️ Tecnologias
 
-- Vite 5.4.2
-- TypeScript 5.5.3
-- Tailwind CSS 3.4.1
-- PostCSS 8.4.35
-- Autoprefixer 10.4.18
+- **Frontend**
+  - React
+  - TypeScript
+  - Tailwind CSS
+  - Lucide Icons
+  - Date-fns
 
-## Configuração do Ambiente
+- **Backend**
+  - Supabase (Autenticação e Banco de Dados)
+
+## 📁 Estrutura do Projeto
+
+```
+src/
+├── components/
+│   ├── atoms/       # Componentes básicos (botões, inputs, etc)
+│   ├── molecules/   # Composições de atoms
+│   └── organisms/   # Composições complexas
+├── pages/           # Páginas da aplicação
+├── store/           # Gerenciamento de estado
+├── lib/            # Configurações e utilitários
+└── types/          # Definições de tipos TypeScript
+```
+
+## 🎨 Design System
+
+- **Cores**
+  - Primary: #00a5b4
+  - Primary Dark: #2CC1B3
+  - Secondary: #FFFFFF
+  - Background: Gradiente do primary para #87CEEB
+
+- **Tipografia**
+  - Títulos: Bevan
+  - Texto: Inder
+
+- **Componentes**
+  - Modais
+  - Botões
+  - Inputs
+  - Barras de Progresso
+  - Animações de Água
+
+## 🚀 Como Executar
 
 1. Clone o repositório
-2. Instale as dependências:
+```bash
+git clone https://github.com/seu-usuario/java-li.git
+cd java-li
+```
+
+2. Instale as dependências
 ```bash
 npm install
 ```
 
-3. Configure as variáveis de ambiente:
-Crie um arquivo `.env` na raiz do projeto com:
-```
-VITE_SUPABASE_URL=sua_url_do_supabase
-VITE_SUPABASE_ANON_KEY=sua_chave_anonima_do_supabase
+3. Configure as variáveis de ambiente
+```bash
+cp .env.example .env
+# Adicione suas credenciais do Supabase no arquivo .env
 ```
 
-4. Inicie o servidor de desenvolvimento:
+4. Execute o projeto
 ```bash
 npm run dev
 ```
 
-## Scripts Disponíveis
+## 👥 Autenticação e Usuários
 
-- `npm run dev` - Inicia o servidor de desenvolvimento
-- `npm run build` - Cria a build de produção
-- `npm run preview` - Visualiza a build de produção localmente
-- `npm run lint` - Executa o linter
+- Sistema completo de autenticação com Supabase
+- Registro com:
+  - Nome
+  - Email
+  - Data de Nascimento
+  - Peso
+- Login com email e senha
+- Recuperação de senha
 
-## Estrutura do Banco de Dados (Supabase)
+## ⚙️ Configurações do Usuário
 
-### Tabelas Necessárias
+- Meta diária de água
+- Volume do copo padrão
+- Seleção de pet virtual
+- Preferências de notificação (em desenvolvimento)
+- Modo noturno (em desenvolvimento)
+- Idiomas (em desenvolvimento)
 
-1. `water_history`
-   - id (uuid, primary key)
-   - user_id (uuid, foreign key)
-   - amount (integer)
-   - date (date)
-   - created_at (timestamp)
+## 🔄 Estado da Aplicação
 
-2. `user_settings`
-   - user_id (uuid, primary key)
-   - daily_goal (integer)
-   - selected_pet (text)
+O estado é gerenciado usando:
+- Zustand para estado global
+- Supabase para persistência de dados
+- Estados locais com React hooks

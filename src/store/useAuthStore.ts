@@ -6,10 +6,12 @@ import { useWaterStore } from './useWaterStore'
 interface AuthState {
   user: any | null
   session: any | null
+  isLoading: boolean
+  error: string | null
   setUser: (user: any) => void
   setSession: (session: any) => void
   signOut: () => Promise<void>
-  loadUserSettings: () => Promise<void>
+  clearError: () => void
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -17,32 +19,39 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       user: null,
       session: null,
-      setUser: (user) => set({ user }),
-      setSession: (session) => set({ session }),
-      signOut: async () => {
-        await supabase.auth.signOut()
-        useWaterStore.getState().resetState()
-        set({ user: null, session: null })
-      },
-      loadUserSettings: async () => {
-        const { user } = get()
-        if (!user) return
-
-        const { data: settings } = await supabase
-          .from('user_settings')
-          .select('*')
-          .eq('user_id', user.id)
-          .single()
-
-        if (settings) {
-          const waterStore = useWaterStore.getState()
-          waterStore.setDailyGoal(settings.daily_goal, user.id)
-          waterStore.setSelectedPet(settings.selected_pet, user.id)
+      isLoading: false,
+      error: null,
+      setUser: (user) => {
+        set({ user });
+        if (user) {
+          // Ao fazer login, carregar histórico
+          useWaterStore.getState().loadHistory();
         }
       },
+      setSession: (session) => set({ session }),
+      signOut: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          await supabase.auth.signOut();
+          useWaterStore.getState().resetState();
+          set({ user: null, session: null, isLoading: false });
+          localStorage.removeItem('auth-storage');
+          localStorage.removeItem('water-storage');
+        } catch (err: any) {
+          set({ 
+            error: err.message || 'Failed to sign out',
+            isLoading: false
+          });
+        }
+      },
+      clearError: () => set({ error: null })
     }),
     {
       name: 'auth-storage',
+      partialize: (state) => ({
+        user: state.user,
+        session: state.session
+      })
     }
   )
 )

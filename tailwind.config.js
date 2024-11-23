@@ -13,6 +13,10 @@ export default {
       backgroundImage: {
         'gradient-primary': 'var(--background)',
       },
+      fontFamily: {
+        'bevan': ['Bevan', 'serif'],
+        'inder': ['Inder', 'sans-serif']
+      },
     },
   },
   plugins: [],

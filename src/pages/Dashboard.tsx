@@ -1,84 +1,65 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaGear } from 'react-icons/fa6';
+import { VirtualPet } from '../components/organisms/Pet/VirtualPet';
+import { PetStatus } from '../components/molecules/Pet/PetStatus';
+import { WaterDisplay } from '../components/molecules/Water/WaterDisplay'; 
 import { useAuthStore } from '../store/useAuthStore';
 import { useWaterStore } from '../store/useWaterStore';
-import { Settings2 } from 'lucide-react';
-import { VirtualPet } from '../components/VirtualPet';
-import { WaterProgress } from '../components/WaterProgress';
-import { Settings } from '../components/Settings';
-import { WaterTracker } from '../components/WaterTracker';
-import { PetStatus } from '../components/PetStatus';
+import bgDash from '../assets/bg-dash.jpg';
 
 export const Dashboard: React.FC = () => {
-  const [showSettings, setShowSettings] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const navigate = useNavigate();
   const { user } = useAuthStore();
   const { loadHistory } = useWaterStore();
 
   useEffect(() => {
-    const initializeDashboard = async () => {
-      try {
-        if (user?.id) {
-          await loadHistory(user.id);
-        }
-      } catch (err) {
-        console.error('Failed to load history:', err);
-        setError('Falha ao carregar dados. Tente novamente mais tarde.');
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (user) {
+      loadHistory();
+    }
+  }, [user, loadHistory]);
 
-    initializeDashboard();
-  }, [user?.id, loadHistory]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-white text-lg">Carregando...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen p-6">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
-          <p>{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-4 text-red-700 underline"
-          >
-            Tentar novamente
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (showSettings) {
-    return <Settings onBack={() => setShowSettings(false)} />;
+  if (!user) {
+    navigate('/login');
+    return null;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-primary relative overflow-hidden">
-      <button
-        onClick={() => setShowSettings(true)}
-        className="absolute top-4 right-4 text-white p-2 rounded-full hover:bg-white/10 z-10"
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Main Content with Background */}
+      <div 
+        className="h-[calc(100vh-200px)] relative bg-cover bg-center"
+        style={{ backgroundImage: `url(${bgDash})` }}
       >
-        <Settings2 size={24} />
-      </button>
+        {/* Settings Button */}
+        <button
+          onClick={() => navigate('/settings')}
+          className="absolute top-5 left-5 text-white p-2 rounded-full hover:bg-white/10 z-10"
+        >
+          <FaGear size={42} />
+        </button>
+        
+        {/* Content */}
+        <div className="flex flex-col h-full justify-between py-10">
+          {/* Progresso de Água */}
+          <WaterDisplay />
 
-      <WaterProgress />
-      
-      <div className="flex-1 flex flex-col items-center justify-center mt-12">
-        <VirtualPet />
-        <div className="mt-8">
-          <WaterTracker />
+          {/* Pet Virtual */}
+          <div className="flex-1 flex items-center justify-center mt-5">
+            <VirtualPet size="large" />
+          </div>
         </div>
       </div>
 
-      <PetStatus />
+      {/* Bottom Container */}
+      <div className="h-[200px] bg-gradient-primary">
+        {/* Status do Pet */}
+        <div className="flex justify-center">
+          <PetStatus />
+        </div>
+      </div>
     </div>
   );
 };
+
+export default Dashboard;
