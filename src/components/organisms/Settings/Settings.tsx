@@ -1,27 +1,37 @@
 import React, { useState } from 'react';
-import { useWaterStore } from '../../../store/useWaterStore';
 import { useAuthStore } from '../../../store/useAuthStore';
+// Imports dos componentes
 import { Button } from '../../atoms/Button/Button';
 import { Title } from '../../atoms/Typography/Title';
-import { ChevronLeft } from 'lucide-react';
 import { IconButton } from '../../atoms/Button/IconButton';
 import { PetSelectionModal } from '../Modal/PetSelectionModal';
 import { DailyGoalModal } from '../Modal/DailyGoalModal';
 import { CupVolumeModal } from '../Modal/CupVolumeModal';
 
+// Imports de ícones
+import { ChevronLeft } from 'lucide-react';
+
+// Props do componente
 interface SettingsProps {
   onBack: () => void;
 }
 
-type SettingsView = 'main';
-
+/**
+ * Componente de configurações que permite ao usuário:
+ * - Selecionar um pet
+ * - Definir meta diária de água
+ * - Configurar volume do copo
+ * - Fazer logout
+ */
 export const Settings: React.FC<SettingsProps> = ({ onBack }) => {
-  const { signOut } = useAuthStore();
-  const [view, setView] = useState<SettingsView>('main');
+  // Estados para controle de visibilidade dos modais
   const [showPetModal, setShowPetModal] = useState(false);
   const [showDailyGoalModal, setShowDailyGoalModal] = useState(false);
   const [showCupVolumeModal, setShowCupVolumeModal] = useState(false);
 
+  const { signOut } = useAuthStore();
+
+  // Função para fazer logout do usuário
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -30,6 +40,7 @@ export const Settings: React.FC<SettingsProps> = ({ onBack }) => {
     }
   };
 
+  // Renderiza o conteúdo principal com os botões de configuração
   const renderContent = () => {
     return (
       <div className="p-4 space-y-4">

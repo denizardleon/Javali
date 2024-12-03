@@ -7,16 +7,26 @@ import { AuthError } from '../components/molecules/Error/AuthError';
 import Button from '../components/atoms/Button/Button';
 import { Input } from '../components/atoms/Input/Input';
 import { Capy } from '../components/atoms/Images/Images';
+
+// Componente responsável pela tela de login dos usuários
 export const Login: React.FC = () => {
+  // Hook de navegação para redirecionamento após autenticação
   const navigate = useNavigate();
+  
+  // Estados para controle de erros e loading durante a autenticação
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Dados do formulário de login
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  
+  // Função do Zustand para atualizar o usuário no estado global
   const setUser = useAuthStore((state) => state.setUser);
 
+  // Atualiza os campos do formulário e limpa mensagens de erro
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError('');
     const { name, value } = e.target;
@@ -26,13 +36,16 @@ export const Login: React.FC = () => {
     }));
   };
 
+  // Processa o envio do formulário e realiza a autenticação
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Ativa indicador de carregamento e limpa erros anteriores
     setLoading(true);
     setError('');
 
     try {
+      // Tenta autenticar o usuário usando o Supabase
       const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password
@@ -40,11 +53,13 @@ export const Login: React.FC = () => {
 
       if (signInError) throw signInError;
       
+      // Se autenticação bem sucedida, atualiza estado e redireciona
       if (signInData.user) {
         setUser(signInData.user);
         navigate('/dashboard');
       }
     } catch (error: any) {
+      // Tratamento de erros de autenticação com mensagens personalizadas
       console.error('Error:', error);
       setError(
         error.message === 'Invalid login credentials'
@@ -56,6 +71,7 @@ export const Login: React.FC = () => {
     }
   };
 
+  // Interface do formulário de login
   return (
     <div className="min-h-screen p-6 bg-gradient-to-b from-[#01b4c5] to-[#D9D9D9]">
       <div className="max-w-md mx-auto">

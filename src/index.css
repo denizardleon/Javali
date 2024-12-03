@@ -1,10 +1,14 @@
+/* Importação de fontes do Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Bevan&family=Inder&display=swap');
 
+/* Importações do Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Componentes personalizados do Tailwind */
 @layer components {
+  /* Classes para elementos de modal */
   .modal-text {
     @apply text-sm text-gray-600 text-center font-sans;
   }
@@ -18,6 +22,7 @@
   }
 }
 
+/* Variáveis globais de cores e gradientes */
 :root {
   --primary: #00B4C5;
   --primary-dark: #00737E;
@@ -25,12 +30,14 @@
   --background: linear-gradient(180deg, var(--primary) 0%, #87CEEB 100%);
 }
 
+/* Estilos base do corpo da página */
 body {
   background: var(--background);
   min-height: 100vh;
   font-family: inherit;
 }
 
+/* Componentes com efeito glass morphism */
 .glass-input {
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -60,15 +67,7 @@ body {
   background: rgba(255, 255, 255, 0.35);
 }
 
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(-4rem) translateX(-50%) scale(1);
-  }
-  50% {
-    transform: translateY(-5rem) translateX(-50%) scale(1.1);
-  }
-}
-
+/* Animação para efeito de fade */
 @keyframes bounce-fade {
   0% {
     opacity: 1;
@@ -84,6 +83,7 @@ body {
   }
 }
 
+/* Ajuste de fonte responsivo para telas maiores */
 @media screen and (min-width: 800px) {
   :root {
     font-size: 24px;

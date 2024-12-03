@@ -2,7 +2,8 @@ import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import { useWaterStore } from './useWaterStore'
 
-// Define o estado de autenticação
+// Define as configurações do usuário que podem ser personalizadas
+// Inclui meta diária de água, pet escolhido, volume do copo e peso
 interface UserSettings {
   daily_goal: number
   selected_pet: 'capybara' | 'cat'
@@ -10,6 +11,8 @@ interface UserSettings {
   weight: number | null
 }
 
+// Gerencia o estado global de autenticação e configurações do usuário
+// Inclui dados do usuário, sessão, estados de carregamento e funções de manipulação
 interface AuthState {
   user: any
   session: any
@@ -24,6 +27,7 @@ interface AuthState {
   updateSettings: (settings: Partial<UserSettings>) => Promise<void>
 }
 
+// Configurações padrão aplicadas quando um novo usuário é criado
 const DEFAULT_SETTINGS: UserSettings = {
   daily_goal: 2000,
   selected_pet: 'capybara',
@@ -31,14 +35,16 @@ const DEFAULT_SETTINGS: UserSettings = {
   weight: null
 }
 
-// Cria o store de autenticação
+// Store principal de autenticação usando Zustand
+// Gerencia todo o estado relacionado ao usuário e suas configurações
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   session: null,
   isLoading: false,
   error: null,
   settings: null,
-  // Função que atualiza o estado do usuário e carrega as configurações
+  // Atualiza o usuário atual e inicializa suas configurações e histórico
+  // É chamada após login bem-sucedido ou ao recarregar a página
   setUser: async (user) => { 
     set({ user });
     if (user) {
@@ -48,9 +54,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       await useWaterStore.getState().loadHistory();
     }
   },
-  // Função que atualiza o estado da sessão
+  // Atualiza a sessão atual do usuário
+  // Mantém o token de autenticação e outros dados da sessão
   setSession: (session) => set({ session }),
 
+  // Realiza o processo de logout
+  // Limpa os dados locais e encerra a sessão no Supabase
   signOut: async () => {
     set({ isLoading: true, error: null });
     try {
@@ -72,8 +81,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
+  // Remove mensagens de erro do estado
   clearError: () => set({ error: null }),
- // Função que carrega as configurações do usuário
+
+  // Busca as configurações do usuário no banco de dados
+  // Se não existirem, cria com valores padrão
+  // Sincroniza as configurações com o WaterStore
   loadUserSettings: async () => {
     const { user } = get();
     if (!user) {
@@ -113,6 +126,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
+  // Atualiza as configurações do usuário no banco e no estado local
+  // Aceita atualizações parciais, mantendo valores existentes
+  // Sincroniza alterações com o WaterStore para manter consistência
   updateSettings: async (newSettings: Partial<UserSettings>) => {
     const { user, settings } = get();
     if (!user) return;

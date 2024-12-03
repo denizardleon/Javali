@@ -22,6 +22,7 @@ export const Register: React.FC = () => {
   });
   const { setUser, loadUserSettings } = useAuthStore();
 
+  // Gerencia mudanças nos campos do formulário, limpando mensagens de erro anteriores
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError('');
     const { name, value } = e.target;
@@ -31,6 +32,7 @@ export const Register: React.FC = () => {
     }));
   };
 
+  // Gerencia especificamente mudanças no campo de data de nascimento
   const handleDateChange = (value: string) => {
     setError('');
     setFormData(prev => ({
@@ -39,24 +41,30 @@ export const Register: React.FC = () => {
     }));
   };
 
-  // Funçao que valida os campos do formulario
+  // Realiza validação completa do formulário antes do envio
+  // Retorna false e exibe erro se algum campo estiver inválido
   const validateForm = () => {
+    // Validação do nome: não pode estar vazio após remover espaços
     if (!formData.name?.trim()) {
       setError('Nome é obrigatório');
       return false;
     }
+    // Validação do email: campo obrigatório
     if (!formData.email?.trim()) {
       setError('Email é obrigatório');
       return false;
     }
+    // Validação da senha: campo obrigatório
     if (!formData.password?.trim()) {
       setError('Senha é obrigatória');
       return false;
     }
+    // Confirma se as senhas digitadas são iguais
     if (formData.password !== formData.confirmPassword) {
       setError('As senhas não coincidem');
       return false;
     }
+    // Verifica comprimento mínimo da senha por segurança
     if (formData.password.length < 6) {
       setError('A senha deve ter pelo menos 6 caracteres');
       return false;
@@ -64,7 +72,8 @@ export const Register: React.FC = () => {
     return true;
   };
 
-  // Funçao que lida com o envio do formulario
+  // Processa o envio do formulário de registro
+  // Cria a conta do usuário e configura suas preferências iniciais
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -73,6 +82,7 @@ export const Register: React.FC = () => {
     setError('');
 
     try {
+      // Registra o usuário no Supabase com seus dados básicos
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -89,10 +99,11 @@ export const Register: React.FC = () => {
 
       if (signUpData.user) {
         const weight = Number(formData.weight) || null;
-        // Calcula a meta recomendada de agua baseado no peso, se não tiver peso, usa 2litros como base
+        // Define meta diária de água: 35ml por kg de peso ou 2L se peso não informado
         const recommendedGoal = weight ? weight * 35 : 2000;
         
-        // Cria as configuraçoes iniciais do usuario
+        // Insere configurações padrão do usuário no banco
+        // Inclui meta diária, pet inicial e volume do copo padrão
         const { error: settingsError } = await supabase
           .from('user_settings')
           .insert([
@@ -107,7 +118,7 @@ export const Register: React.FC = () => {
 
         if (settingsError) throw settingsError;
         
-        // Atualiza o estado do usuário e carrega as configurações
+        // Atualiza o contexto da aplicação com os dados do novo usuário
         setUser(signUpData.user);
         await loadUserSettings(); 
         navigate('/dashboard');

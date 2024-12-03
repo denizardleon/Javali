@@ -21,16 +21,20 @@ import { PetSelectionModal } from '../components/organisms/Modal/PetSelectionMod
 import { DailyGoalModal } from '../components/organisms/Modal/DailyGoalModal';
 import { CupVolumeModal } from '../components/organisms/Modal/CupVolumeModal';
 
+// Interface que define as propriedades necessárias para um item de configuração
+// Usada para padronizar a estrutura de cada opção no menu de configurações
 interface SettingsItemProps {
-  icon: React.ReactNode;
-  title: string;
-  subtitle: string;
-  onClick: () => void;
-  isFirst?: boolean;
-  isLast?: boolean;
-  isStandalone?: boolean;
+  icon: React.ReactNode;      // Ícone exibido à esquerda do item
+  title: string;             // Título principal do item
+  subtitle: string;          // Descrição ou subtítulo
+  onClick: () => void;       // Função executada ao clicar no item
+  isFirst?: boolean;         // Indica se é o primeiro item do grupo (para estilização)
+  isLast?: boolean;         // Indica se é o último item do grupo (para estilização)
+  isStandalone?: boolean;   // Indica se o item está sozinho no grupo
 }
 
+// Componente que renderiza um item individual do menu de configurações
+// Responsável pela aparência e comportamento de cada opção
 const SettingsItem: React.FC<SettingsItemProps> = ({ 
   icon, 
   title, 
@@ -74,16 +78,17 @@ export const Settings: React.FC = () => {
     navigate('/');
   };
 
-  // Agrupamento dos itens de configuração
+  // Organização das configurações em grupos lógicos
+  // Cada array interno representa um grupo visualmente separado na interface
   const settingsGroups = [
-    // Grupo 1: Seleção de Pet
+    // Grupo de personalização do pet virtual
     [{
       icon: <Cat className="w-8 h-" />,
       title: "Selecionar Pet",
       subtitle: "Escolha seu companheiro virtual",
       onClick: () => setIsPetModalOpen(true)
     }],
-    // Grupo 2: Meta Diária e Volume do Copo
+    // Grupo de configurações relacionadas ao consumo de água
     [
       {
         icon: <Target className="w-6 h-6" />,
@@ -98,7 +103,8 @@ export const Settings: React.FC = () => {
         onClick: () => setIsCupVolumeModalOpen(true)
       }
     ],
-    // Grupo 3: Sons até Idioma
+    // Grupo de configurações gerais do aplicativo
+    // Inclui sons, notificações, idioma e opção de logout
     [
       {
         icon: <Volume2 className="w-6 h-6" />,
@@ -135,7 +141,7 @@ export const Settings: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-primary flex flex-col">
-      {/* Cabeçalho com botão de voltar */}
+      {/* Área superior com botão de navegação e display do pet */}
       <div className="absolute top-0 left-0 p-4">
         <IconButton 
           onClick={() => navigate('/dashboard')}
@@ -144,12 +150,13 @@ export const Settings: React.FC = () => {
         />
       </div>
   
-      {/* Pet Virtual */}
+      {/* Área central com exibição do pet virtual */}
       <div className="flex flex-col items-center pt-8 pb-4">
         <VirtualPet size="large" />
       </div>
 
-      {/* Seção de Configurações */}
+      {/* Área principal com lista de configurações */}
+      {/* Utiliza grid para organizar os grupos de forma responsiva */}
       <div className="bg-gray-300 px-4 pt-5 pb-20">
         <div className="mb-2 w-[80%] mx-auto">
           <SettingsTitle className="text-left">Configurações</SettingsTitle>
@@ -175,7 +182,8 @@ export const Settings: React.FC = () => {
         </div>
       </div>
   
-      {/* Modais */}
+      {/* Modais de configuração específica */}
+      {/* Cada modal é responsável por uma configuração que requer mais interação */}
       <PetSelectionModal
         isOpen={isPetModalOpen}
         onClose={() => setIsPetModalOpen(false)}

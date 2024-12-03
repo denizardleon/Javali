@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 
-// Define a interface para as entradas de água
+// Estrutura que define os dados de uma entrada de água no histórico
+// Cada registro contém id único, id do usuário, quantidade de água, data e momento do registro
 interface WaterEntry {
   id: string
   user_id: string
@@ -10,7 +11,8 @@ interface WaterEntry {
   created_at: string
 }
 
-// Define o estado da hidratação que é armazenado no store
+// Define a estrutura do estado global e suas funções de manipulação
+// Inclui metas, consumo, histórico, preferências e funções de gerenciamento
 interface WaterState {
   dailyGoal: number
   waterIntake: number
@@ -33,6 +35,7 @@ interface WaterState {
   getRecommendedIntake: () => number
 }
 
+// Estado inicial da aplicação com valores padrão
 const initialState = {
   dailyGoal: 0,
   waterIntake: 0,
@@ -47,6 +50,8 @@ const initialState = {
 export const useWaterStore = create<WaterState>((set, get) => ({
   ...initialState,
 
+  // Atualiza a meta diária de consumo de água do usuário
+  // Valida se está entre 500ml e 5000ml antes de salvar no banco
   setDailyGoal: async (goal) => {
     const session = await supabase.auth.getSession();
     const userId = session.data.session?.user?.id;
@@ -81,6 +86,9 @@ export const useWaterStore = create<WaterState>((set, get) => ({
     }
   },
 
+  // Registra novo consumo de água
+  // Valida o total diário para não ultrapassar a meta
+  // Atualiza o histórico e total consumido
   addWater: async (amount) => {
     console.log('Iniciando addWater com amount:', amount);
     const session = await supabase.auth.getSession();
@@ -145,7 +153,9 @@ export const useWaterStore = create<WaterState>((set, get) => ({
       });
     }
   },
-  // carrerga o histórico de entradas de água
+
+  // Carrega o histórico de consumo do dia atual
+  // Calcula o total consumido e atualiza o estado
   loadHistory: async () => {
     const session = await supabase.auth.getSession();
     const userId = session.data.session?.user?.id;
@@ -185,6 +195,8 @@ export const useWaterStore = create<WaterState>((set, get) => ({
     }
   },
 
+  // Salva a preferência do pet virtual escolhido pelo usuário
+  // Cria ou atualiza as configurações no banco de dados
   setSelectedPet: async (pet) => {
     const session = await supabase.auth.getSession();
     const userId = session.data.session?.user?.id;
@@ -244,6 +256,8 @@ export const useWaterStore = create<WaterState>((set, get) => ({
     }
   },
 
+  // Define o volume do copo padrão usado para registros rápidos
+  // Mantém a preferência sincronizada com o banco de dados
   setCupVolume: async (volume) => {
     const session = await supabase.auth.getSession();
     const userId = session.data.session?.user?.id;
@@ -300,6 +314,8 @@ export const useWaterStore = create<WaterState>((set, get) => ({
     }
   },
 
+  // Registra o peso do usuário e recalcula meta diária recomendada
+  // A meta é calculada multiplicando o peso por 35ml
   setWeight: async (weight) => {
     const session = await supabase.auth.getSession();
     const userId = session.data.session?.user?.id;
@@ -355,15 +371,20 @@ export const useWaterStore = create<WaterState>((set, get) => ({
     }
   },
 
+  // Reseta o estado da aplicação para os valores iniciais
   resetState: () => {
     set({ ...initialState });
   },
 
+  // Calcula a porcentagem da meta diária já atingida
+  // Retorna no máximo 100% mesmo se ultrapassar a meta
   getDailyProgress: () => {
     const { waterIntake, dailyGoal } = get();
     return Math.min((waterIntake / dailyGoal) * 100, 100);
   },
 
+  // Calcula quantos dias seguidos o usuário atingiu algum consumo
+  // Analisa o histórico retroativamente até encontrar um dia sem registros
   getStreak: () => {
     const { history } = get();
     let streak = 0;
@@ -383,8 +404,11 @@ export const useWaterStore = create<WaterState>((set, get) => ({
     return streak;
   },
 
+  // Limpa mensagens de erro do estado
   clearError: () => set({ error: null }),
 
+  // Calcula consumo diário recomendado baseado no peso
+  // Se não houver peso registrado, retorna 2000ml como padrão
   getRecommendedIntake: () => {
     const { weight } = get();
     return weight ? weight * 35 : 2000;

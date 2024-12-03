@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
 import { Home } from './pages/Home';
@@ -9,7 +9,7 @@ import { Settings } from './pages/Settings';
 import { supabase } from './lib/supabase';
 
 export default function App() {
-  const { user, setUser, setSession, loadUserSettings } = useAuthStore();
+  const { user, setUser, setSession } = useAuthStore();
 
   useEffect(() => {
     let isInitializing = false;
