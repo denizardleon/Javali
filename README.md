@@ -11,40 +11,61 @@ App moderno para acompanhamento do consumo diário de água, com um companheiro 
   - Volume do copo personalizável
   - Histórico de consumo
 
+
 - **Pet Virtual**
   - Escolha entre Capivara ou Gato como seu companheiro
-  - Acompanha seu progresso e muda o status de acordo com o consumo de água
+  - Sistema de status dinâmico baseado no consumo de água
+  - Animações e interações personalizadas
+  - Feedback visual do progresso
 
 - **Interface Moderna**
   - Design responsivo e intuitivo
-  - Animações suaves
+  - Animações suaves 
   - Tema com gradientes em tons de azul
   - Componentes reutilizáveis
+
 
 ## 🛠️ Tecnologias
 
 - **Frontend**
-  - React
+  - React 18
   - TypeScript
   - Tailwind CSS
-  - Lucide Icons
-  - Date-fns
+  - Lucide Icons & React Icons
+  - Date-fns para manipulação de datas
+  - Zustand para gerenciamento de estado
+  - React Router para navegação
 
-- **Backend**
-  - Supabase (Autenticação e Banco de Dados)
+- **Mobile**
+  - Capacitor para build nativo
+  - Suporte para Android IOS
+
+
+- **Backend & Infraestrutura**
+  - Supabase
+    - Autenticação de usuários
+    - Banco de dados PostgreSQL
+    - Armazenamento em tempo real
+  - Vite como bundler
 
 ## 📁 Estrutura do Projeto
 
 ```
 src/
-├── components/
-│   ├── atoms/       # Componentes básicos (botões, inputs, etc)
-│   ├── molecules/   # Composições de atoms
-│   └── organisms/   # Composições complexas
-├── pages/           # Páginas da aplicação
-├── store/           # Gerenciamento de estado
-├── lib/            # Configurações e utilitários
-└── types/          # Definições de tipos TypeScript
+├── assets/         # Recursos estáticos (imagens, ícones)
+├── components/     # Componentes React
+│   ├── atoms/     # Componentes básicos (botões, inputs)
+│   ├── molecules/ # Composições de atoms
+│   └── organisms/ # Composições complexas
+├── pages/         # Componentes de página
+│   ├── Dashboard/ # Página principal do app
+│   ├── Home/      # Página inicial
+│   ├── Login/     # Autenticação
+│   ├── Register/  # Cadastro
+│   └── Settings/  # Configurações
+├── store/         # Estados globais com Zustand
+├── lib/           # Configurações e utilitários
+└── types/         # Definições de tipos TypeScript
 ```
 
 ## 🎨 Design System
@@ -60,11 +81,11 @@ src/
   - Texto: Inder
 
 - **Componentes**
-  - Modais
-  - Botões
-  - Inputs
-  - Barras de Progresso
-  - Animações de Água
+  - Modais responsivos
+  - Botões com feedback tátil
+  - Inputs validados
+  - Barras de Progresso animadas
+  - Animações de água fluidas
 
 ## 🚀 Como Executar
 
@@ -87,31 +108,46 @@ cp .env.example .env
 
 4. Execute o projeto
 ```bash
+# Desenvolvimento web
 npm run dev
+
+# Build Android
+npm run ionic:build
+npx cap sync android
+npx cap open android
 ```
 
-## 👥 Autenticação e Usuários
+## 👥 Sistema de Usuários
 
-- Sistema completo de autenticação com Supabase
-- Registro com:
-  - Nome
-  - Email
+- **Autenticação Completa**
+  - Login com email/senha
+  - Registro com validações
+  - Recuperação de senha
+  - Persistência de sessão
+
+- **Perfil do Usuário**
+  - Nome 
+  - Email 
   - Data de Nascimento
-  - Peso
-- Login com email e senha
-- Recuperação de senha
+  - Peso para cálculo da meta
+  - Preferências salvas
 
-## ⚙️ Configurações do Usuário
+## ⚙️ Configurações Personalizáveis
 
-- Meta diária de água
+- Meta diária de água calculada
 - Volume do copo padrão
-- Seleção de pet virtual
-- Preferências de notificação (em desenvolvimento)
+- Seleção e personalização do pet
 - Idiomas (em desenvolvimento)
 
-## 🔄 Estado da Aplicação
+## 🔄 Gerenciamento de Estado
 
-O estado é gerenciado usando:
-- Zustand para estado global
-- Supabase para persistência de dados
-- Estados locais com React hooks
+- **Zustand**
+  - Estado global da aplicação
+  - Estado de autenticação
+  - Configurações do usuário
+  - Progresso diário
+
+- **Supabase**
+  - Persistência em tempo real
+  - Cache offline
+  - Sincronização automática

@@ -63,7 +63,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Barra inferior com status do pet */}
       <div className="h-[200px] bg-gradient-primary">
-        {/* Indicadores de humor, energia e outros status do pet */}
+        {/* Status do pet */}
         <div className="flex justify-center">
           <PetStatus />
         </div>

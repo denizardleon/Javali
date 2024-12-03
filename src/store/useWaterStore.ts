@@ -127,15 +127,6 @@ export const useWaterStore = create<WaterState>((set, get) => ({
       // Calculando o novo total de água
       const newTotal = entries?.reduce((sum, entry) => sum + entry.amount, 0) || 0;
 
-      // Verifica se não excede a meta diária
-      if (newTotal > get().dailyGoal) {
-        set({ 
-          error: 'Meta diária já atingida!', 
-          isLoading: false 
-        });
-        return;
-      }
-
       // Atualiza o estado local do aplicativo
       set({ 
         waterIntake: newTotal,
