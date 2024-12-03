@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
 import { useWaterStore } from '../store/useWaterStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { SettingsTitle } from '../components/atoms/Typography/SettingsTitle';
@@ -8,8 +7,6 @@ import {
   ChevronLeft, 
   ChevronRight,
   Globe2, 
-  RefreshCcw, 
-  HelpCircle, 
   Volume2,
   BellRing,
   Moon,
@@ -69,7 +66,7 @@ export const Settings: React.FC = () => {
   const [isPetModalOpen, setIsPetModalOpen] = useState(false);
   const [isDailyGoalModalOpen, setIsDailyGoalModalOpen] = useState(false);
   const [isCupVolumeModalOpen, setIsCupVolumeModalOpen] = useState(false);
-  const { clearError } = useWaterStore();
+  const { } = useWaterStore();
   const { signOut } = useAuthStore();
 
   const handleSignOut = async () => {
@@ -79,7 +76,7 @@ export const Settings: React.FC = () => {
 
   // Agrupamento dos itens de configuração
   const settingsGroups = [
-    // Grupo 1: Seleção de Pet (sozinho)
+    // Grupo 1: Seleção de Pet
     [{
       icon: <Cat className="w-6 h-6" />,
       title: "Selecionar Pet",
@@ -138,7 +135,7 @@ export const Settings: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-primary">
-      {/* Header with back button */}
+      {/* Cabeçalho com botão de voltar */}
       <div className="absolute top-0 left-0 p-4">
         <IconButton 
           onClick={() => navigate('/dashboard')}
@@ -151,7 +148,7 @@ export const Settings: React.FC = () => {
         <VirtualPet size="large" />
       </div>
 
-      {/* Settings Section */}
+      {/* Seção de Configurações */}
       <div className="bg-gray-300 px-4 pt-5 pb-20">
         <div className="mb-2 w-[80%] mx-auto">
           <SettingsTitle className="text-left">

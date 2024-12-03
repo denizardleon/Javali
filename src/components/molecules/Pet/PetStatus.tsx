@@ -21,7 +21,7 @@ const getMoodEmoji = (mood: PetMood) => {
 };
 
 /**
- * Componente molecular que mostra o status do pet
+ * molecula que mostra o status do pet
  */
 export const PetStatus: React.FC = () => {
   const { getDailyProgress, getStreak } = useWaterStore();
@@ -71,7 +71,7 @@ export const PetStatus: React.FC = () => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-cyan-500 p-4 pt-6 pb-0 flex justify-center">
       <div className="flex flex-col items-center space-y-4 w-80">
-        {/* Status do Pet Header */}
+        {/* cabecalho  de status*/}
         <RoundedContainer
           roundedClasses="rounded-full"
           paddingClasses="px-8 py-2"
@@ -84,7 +84,6 @@ export const PetStatus: React.FC = () => {
           </div>
         </RoundedContainer>
         
-        {/* Status Content */}
         <div className="flex items-start gap-6 w-full justify-between">
           {/* Status do Pet */}
           <RoundedContainer

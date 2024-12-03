@@ -5,33 +5,55 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
-import { Settings } from './pages/Settings'; // Add this line
+import { Settings } from './pages/Settings';
 import { supabase } from './lib/supabase';
 
 export default function App() {
   const { user, setUser, setSession, loadUserSettings } = useAuthStore();
 
   useEffect(() => {
+    let isInitializing = false;
+
     const initializeAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (isInitializing) return;
+      isInitializing = true;
       
-      if (session?.user) {
-        setSession(session);
-        setUser(session.user);
-        await loadUserSettings();
-      } else {
-        setSession(null);
-        setUser(null);
+      try {
+        console.log('Inicializando autenticação...');
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Erro ao obter sessão:', error);
+          return;
+        }
+
+        console.log('Sessão atual:', session);
+        
+        if (session?.user) {
+          console.log('Usuário autenticado:', session.user);
+          setSession(session);
+          await setUser(session.user);
+        } else {
+          console.log('Nenhum usuário autenticado');
+          setSession(null);
+          setUser(null);
+        }
+      } catch (error) {
+        console.error('Erro na inicialização da autenticação:', error);
+      } finally {
+        isInitializing = false;
       }
     };
 
     initializeAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (isInitializing) return;
+      console.log('Mudança no estado de autenticação:', event, session);
+      
       if (session?.user) {
         setSession(session);
-        setUser(session.user);
-        await loadUserSettings();
+        await setUser(session.user);
       } else {
         setSession(null);
         setUser(null);

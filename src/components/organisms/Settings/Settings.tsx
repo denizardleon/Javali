@@ -5,7 +5,6 @@ import { Button } from '../../atoms/Button/Button';
 import { Title } from '../../atoms/Typography/Title';
 import { ChevronLeft } from 'lucide-react';
 import { IconButton } from '../../atoms/Button/IconButton';
-import { History } from '../History/History';
 import { PetSelectionModal } from '../Modal/PetSelectionModal';
 import { DailyGoalModal } from '../Modal/DailyGoalModal';
 import { CupVolumeModal } from '../Modal/CupVolumeModal';
@@ -14,7 +13,7 @@ interface SettingsProps {
   onBack: () => void;
 }
 
-type SettingsView = 'main' | 'history';
+type SettingsView = 'main';
 
 export const Settings: React.FC<SettingsProps> = ({ onBack }) => {
   const { signOut } = useAuthStore();
@@ -32,10 +31,6 @@ export const Settings: React.FC<SettingsProps> = ({ onBack }) => {
   };
 
   const renderContent = () => {
-    if (view === 'history') {
-      return <History onBack={() => setView('main')} />;
-    }
-
     return (
       <div className="p-4 space-y-4">
         <Button
@@ -59,13 +54,6 @@ export const Settings: React.FC<SettingsProps> = ({ onBack }) => {
         >
           Volume do Copo
         </Button>
-        <Button
-          onClick={() => setView('history')}
-          variant="outline"
-          fullWidth
-        >
-          Histórico
-        </Button>
         <Button onClick={handleSignOut} variant="outline" fullWidth>
           Sair
         </Button>
@@ -75,18 +63,16 @@ export const Settings: React.FC<SettingsProps> = ({ onBack }) => {
 
   return (
     <div className="h-full flex flex-col">
-      {view === 'main' && (
-        <div className="flex items-center p-4 gap-2">
-          <IconButton
-            icon={ChevronLeft}
-            onClick={onBack}
-            size={24}
-          />
-          <Title className="text-xl font-bold">
-            Configurações
-          </Title>
-        </div>
-      )}
+      <div className="flex items-center p-4 gap-2">
+        <IconButton
+          icon={ChevronLeft}
+          onClick={onBack}
+          size={24}
+        />
+        <Title className="text-xl font-bold">
+          Configurações
+        </Title>
+      </div>
 
       {renderContent()}
 

@@ -11,12 +11,20 @@ import bgDash from '../assets/bg-dash.jpg';
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { loadHistory } = useWaterStore();
+  const { loadHistory, isLoading, error } = useWaterStore();
 
   useEffect(() => {
-    if (user) {
-      loadHistory();
-    }
+    const loadData = async () => {
+      if (user) {
+        try {
+          await loadHistory();
+        } catch (error) {
+          console.error('Erro ao carregar dados:', error);
+        }
+      }
+    };
+
+    loadData();
   }, [user, loadHistory]);
 
   if (!user) {
@@ -26,12 +34,12 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Main Content with Background */}
+      {/* Conteúdo Principal com Fundo */}
       <div 
         className="h-[calc(100vh-200px)] relative bg-cover bg-center"
         style={{ backgroundImage: `url(${bgDash})` }}
       >
-        {/* Settings Button */}
+        {/* Botão de Configurações */}
         <button
           onClick={() => navigate('/settings')}
           className="absolute top-5 left-5 text-white p-2 rounded-full hover:bg-white/10 z-10"
@@ -39,7 +47,7 @@ export const Dashboard: React.FC = () => {
           <FaGear size={42} />
         </button>
         
-        {/* Content */}
+        {/* Conteúdo */}
         <div className="flex flex-col h-full justify-between py-10">
           {/* Progresso de Água */}
           <WaterDisplay />
@@ -51,7 +59,7 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Container */}
+      {/* Container Inferior */}
       <div className="h-[200px] bg-gradient-primary">
         {/* Status do Pet */}
         <div className="flex justify-center">

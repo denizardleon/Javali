@@ -16,12 +16,14 @@ create table if not exists user_settings (
   daily_goal int not null default 2000,
   selected_pet text not null default 'capybara',
   cup_volume int not null default 250,
+  weight numeric(5,2),
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null,
 
   constraint daily_goal_positive check (daily_goal > 0),
   constraint cup_volume_positive check (cup_volume > 0),
-  constraint valid_pet check (selected_pet in ('capybara', 'cat'))
+  constraint valid_pet check (selected_pet in ('capybara', 'cat')),
+  constraint weight_positive check (weight > 0)
 );
 
 -- Habilitar RLS

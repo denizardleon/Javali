@@ -3,6 +3,7 @@ import copoImg from '../../../assets/copo.png';
 import logoImg from '../../../assets/logo.png';
 import capyImg from '../../../assets/capy.png';
 
+//atomo para lidar coma as imagens já que que elas são uns amores e não carregavam diretamente no android
 export const Copo: React.FC = () => {
   return (
     <div className="mt-8">

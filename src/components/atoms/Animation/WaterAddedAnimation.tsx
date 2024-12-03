@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
+// animação que nem foi feita pelo ChatGPT 🤖💧
+
 interface WaterAddedAnimationProps {
   amount: number;
   onComplete: () => void;
@@ -28,6 +30,7 @@ export const WaterAddedAnimation: React.FC<WaterAddedAnimationProps> = ({
         'pointer-events-none z-50'
       )}
       style={{
+
         animation: isAnimating ? 'bounce-fade 1s forwards' : 'none'
       }}
     >
@@ -35,5 +38,6 @@ export const WaterAddedAnimation: React.FC<WaterAddedAnimationProps> = ({
     </div>
   );
 };
+
 
 export default WaterAddedAnimation;

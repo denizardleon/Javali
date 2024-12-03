@@ -21,7 +21,7 @@ const petInfo = {
 } as const;
 
 /**
- * Componente molecular que permite selecionar um pet
+ * molecula para selecionar um pet
  */
 export const PetOption: React.FC<PetOptionProps> = ({ 
   pet,

@@ -6,11 +6,13 @@ import { ModalHeader } from '../../molecules/Modal/ModalHeader';
 import { ModalBody } from '../../molecules/Modal/ModalBody';
 import { Pet } from '../../atoms/Pet/Pet';
 
+// Define as propriedades do componente
 interface PetSelectionModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+// Define os tipos de pets disponíveis
 const AVAILABLE_PETS = ['capybara', 'cat'] as const;
 type PetType = typeof AVAILABLE_PETS[number];
 
@@ -18,17 +20,21 @@ type PetType = typeof AVAILABLE_PETS[number];
  * Componente organismo para seleção do pet virtual
  */
 export const PetSelectionModal: React.FC<PetSelectionModalProps> = ({ isOpen, onClose }) => {
-  const { selectedPet, setSelectedPet, error } = useWaterStore();
+  // Obtém os estados e funções do store
+  const { selectedPet, setSelectedPet, error, loadHistory } = useWaterStore();
+  // Estados locais para controle da seleção, carregamento e erros
   const [selected, setSelected] = useState<PetType>(selectedPet);
   const [isLoading, setIsLoading] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
 
+  // Função para salvar o pet selecionado
   const handleSave = async () => {
     try {
       setIsLoading(true);
       setLocalError(null);
       console.log('Salvando pet selecionado:', selected);
       await setSelectedPet(selected);
+      await loadHistory(); // Recarrega os dados após salvar
       console.log('Pet salvo com sucesso!');
       onClose();
     } catch (error) {
@@ -47,12 +53,14 @@ export const PetSelectionModal: React.FC<PetSelectionModalProps> = ({ isOpen, on
           Selecione o pet que irá te acompanhar
         </p>
         
+        {/* Exibe mensagens de erro, se houver */}
         {(localError || error) && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
             {localError || error}
           </div>
         )}
         
+        {/* Grid de seleção de pets */}
         <div className="grid grid-cols-2 gap-4 mb-6">
           {AVAILABLE_PETS.map((pet) => (
             <button
@@ -74,6 +82,7 @@ export const PetSelectionModal: React.FC<PetSelectionModalProps> = ({ isOpen, on
           ))}
         </div>
 
+        {/* Botões de ação */}
         <div className="flex justify-end gap-2">
           <Button variant="secondary" onClick={onClose} disabled={isLoading}>
             Cancelar

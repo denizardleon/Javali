@@ -10,7 +10,7 @@ const petImages = {
 
 interface PetProps {
   /**
-   * Tipo do pet (capybara ou cat)
+   * Tipo do pet capivara ou gato 
    */
   type: 'capybara' | 'cat';
   

@@ -11,7 +11,7 @@ interface CupVolumeModalProps {
 }
 
 export const CupVolumeModal: React.FC<CupVolumeModalProps> = ({ isOpen, onClose }) => {
-  const { setCupVolume, cupVolume } = useWaterStore();
+  const { setCupVolume, cupVolume, loadHistory } = useWaterStore();
   const [volume, setVolume] = useState(cupVolume);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -19,6 +19,7 @@ export const CupVolumeModal: React.FC<CupVolumeModalProps> = ({ isOpen, onClose 
     try {
       setIsLoading(true);
       await setCupVolume(volume);
+      await loadHistory(); // Recarrega os dados após salvar
       onClose();
     } catch (error) {
       console.error('Error setting cup volume:', error);
@@ -35,6 +36,7 @@ export const CupVolumeModal: React.FC<CupVolumeModalProps> = ({ isOpen, onClose 
           Defina a quantidade de água adicionada a cada clique
         </p>
         
+        {/* Imput para definir o volume do copo */}
         <div className="flex flex-col items-center gap-4 mb-6">
           <input
             type="number"

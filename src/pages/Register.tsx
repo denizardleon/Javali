@@ -20,7 +20,7 @@ export const Register: React.FC = () => {
     password: '',
     confirmPassword: ''
   });
-  const setUser = useAuthStore((state) => state.setUser);
+  const { setUser, loadUserSettings } = useAuthStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError('');
@@ -39,6 +39,7 @@ export const Register: React.FC = () => {
     }));
   };
 
+  // Funçao que valida os campos do formulario
   const validateForm = () => {
     if (!formData.name?.trim()) {
       setError('Nome é obrigatório');
@@ -63,6 +64,7 @@ export const Register: React.FC = () => {
     return true;
   };
 
+  // Funçao que lida com o envio do formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -86,18 +88,28 @@ export const Register: React.FC = () => {
       if (signUpError) throw signUpError;
 
       if (signUpData.user) {
+        const weight = Number(formData.weight) || null;
+        // Calcula a meta recomendada de agua baseado no peso, se não tiver peso, usa 2litros como base
+        const recommendedGoal = weight ? weight * 35 : 2000;
+        
+        // Cria as configuraçoes iniciais do usuario
         const { error: settingsError } = await supabase
           .from('user_settings')
           .insert([
             { 
               user_id: signUpData.user.id,
-              daily_goal: 2000,
-              selected_pet: 'capybara'
+              daily_goal: recommendedGoal,
+              selected_pet: 'capybara',
+              cup_volume: 250,
+              weight: weight
             }
           ]);
 
         if (settingsError) throw settingsError;
+        
+        // Atualiza o estado do usuário e carrega as configurações
         setUser(signUpData.user);
+        await loadUserSettings(); 
         navigate('/dashboard');
       }
     } catch (error: any) {
