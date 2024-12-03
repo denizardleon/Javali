@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 
+// Define a interface para as entradas de água
 interface WaterEntry {
   id: string
   user_id: string
@@ -9,17 +10,7 @@ interface WaterEntry {
   created_at: string
 }
 
-interface UserSettings {
-  id: string
-  user_id: string
-  daily_goal: number
-  selected_pet: 'capybara' | 'cat'
-  cup_volume: number
-  weight: number | null
-  created_at: string
-  updated_at: string
-}
-
+// Define o estado da hidratação que é armazenado no store
 interface WaterState {
   dailyGoal: number
   waterIntake: number
@@ -73,46 +64,14 @@ export const useWaterStore = create<WaterState>((set, get) => ({
     set({ isLoading: true, error: null });
     
     try {
-      // Primeiro, tenta buscar as configurações existentes
-      const { data: settings, error: settingsError } = await supabase
+      const { error } = await supabase
         .from('user_settings')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
+        .update({ daily_goal: goal })
+        .eq('user_id', userId);
 
-      if (settingsError && settingsError.code !== 'PGRST116') {
-        throw settingsError;
-      }
+      if (error) throw error;
 
-      if (settings) {
-        // Se existir, atualiza
-        const { error } = await supabase
-          .from('user_settings')
-          .update({ 
-            daily_goal: goal,
-            updated_at: new Date().toISOString()
-          })
-          .eq('user_id', userId);
-
-        if (error) throw error;
-      } else {
-        // Se não existir, cria
-        const { error } = await supabase
-          .from('user_settings')
-          .insert({
-            user_id: userId,
-            daily_goal: goal,
-            selected_pet: 'capybara',
-            cup_volume: 250,
-            weight: null
-          });
-
-        if (error) throw error;
-      }
-
-      // Atualiza o estado e recarrega os dados
       set({ dailyGoal: goal, isLoading: false, error: null });
-      await get().loadHistory();
     } catch (error: any) {
       console.error('Erro ao definir meta diária:', error);
       set({ 
@@ -186,7 +145,7 @@ export const useWaterStore = create<WaterState>((set, get) => ({
       });
     }
   },
-
+  // carrerga o histórico de entradas de água
   loadHistory: async () => {
     const session = await supabase.auth.getSession();
     const userId = session.data.session?.user?.id;
@@ -199,39 +158,8 @@ export const useWaterStore = create<WaterState>((set, get) => ({
     set({ isLoading: true, error: null });
     
     try {
-      // Carrega as configurações do usuário
-      const { data: settings, error: settingsError } = await supabase
-        .from('user_settings')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
-
-      if (settingsError) {
-        console.error('Erro ao carregar configurações:', settingsError);
-        throw settingsError;
-      }
-
-      // Se encontrou configurações, atualiza o estado
-      if (settings) {
-        set({
-          dailyGoal: settings.daily_goal || 2000,
-          weight: settings.weight || null,
-          selectedPet: settings.selected_pet || 'capybara',
-          cupVolume: settings.cup_volume || 250
-        });
-      } else {
-        // Se não encontrou configurações, mantém os valores padrão
-        set({
-          dailyGoal: 2000,
-          weight: null,
-          selectedPet: 'capybara',
-          cupVolume: 250
-        });
-      }
-
-      // Carregar entradas de água para hoje
       const today = new Date().toISOString().split('T')[0];
-      
+      //select para buscar as entradas de água
       const { data: entries, error: entriesError } = await supabase
         .from('water_entries')
         .select('*')
@@ -239,12 +167,8 @@ export const useWaterStore = create<WaterState>((set, get) => ({
         .eq('date', today)
         .order('created_at', { ascending: true });
 
-      if (entriesError) {
-        console.error('Erro ao carregar entradas:', entriesError);
-        throw entriesError;
-      }
+      if (entriesError) throw entriesError;
 
-      // Atualizar estado com os dados do banco
       set({
         waterIntake: entries?.reduce((sum, entry) => sum + entry.amount, 0) || 0,
         history: entries || [],
@@ -253,7 +177,6 @@ export const useWaterStore = create<WaterState>((set, get) => ({
       });
     } catch (error: any) {
       console.error('Erro ao carregar histórico:', error);
-      // Reseta o estado para valores padrão em caso de erro
       set({ 
         ...initialState,
         error: 'Erro ao carregar dados. Por favor, tente novamente.',

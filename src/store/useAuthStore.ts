@@ -2,25 +2,44 @@ import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import { useWaterStore } from './useWaterStore'
 
+// Define o estado de autenticação
+interface UserSettings {
+  daily_goal: number
+  selected_pet: 'capybara' | 'cat'
+  cup_volume: number
+  weight: number | null
+}
+
 interface AuthState {
   user: any
   session: any
   isLoading: boolean
   error: string | null
+  settings: UserSettings | null
   setUser: (user: any) => void
   setSession: (session: any) => void
   signOut: () => Promise<void>
   clearError: () => void
   loadUserSettings: () => Promise<void>
+  updateSettings: (settings: Partial<UserSettings>) => Promise<void>
 }
 
+const DEFAULT_SETTINGS: UserSettings = {
+  daily_goal: 2000,
+  selected_pet: 'capybara',
+  cup_volume: 250,
+  weight: null
+}
+
+// Cria o store de autenticação
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   session: null,
   isLoading: false,
   error: null,
-
-  setUser: async (user) => {
+  settings: null,
+  // Função que atualiza o estado do usuário e carrega as configurações
+  setUser: async (user) => { 
     set({ user });
     if (user) {
       // Primeiro carrega as configurações do usuário
@@ -29,7 +48,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       await useWaterStore.getState().loadHistory();
     }
   },
-
+  // Função que atualiza o estado da sessão
   setSession: (session) => set({ session }),
 
   signOut: async () => {
@@ -54,7 +73,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   clearError: () => set({ error: null }),
-
+ // Função que carrega as configurações do usuário
   loadUserSettings: async () => {
     const { user } = get();
     if (!user) {
@@ -76,33 +95,49 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         throw error;
       }
 
-      console.log('Configurações carregadas:', settings);
-
       if (settings) {
-        await useWaterStore.getState().loadHistory();
+        set({ settings });
+        // Atualiza o WaterStore com as configurações
+        const waterStore = useWaterStore.getState();
+        waterStore.setDailyGoal(settings.daily_goal);
+        waterStore.setSelectedPet(settings.selected_pet);
+        waterStore.setCupVolume(settings.cup_volume);
+        if (settings.weight) waterStore.setWeight(settings.weight);
       } else {
-        console.log('Nenhuma configuração encontrada para o usuário');
-        // Criar configurações padrão se não existirem
-        const { error: insertError } = await supabase
-          .from('user_settings')
-          .insert({
-            user_id: user.id,
-            daily_goal: 2000,
-            selected_pet: 'capybara',
-            cup_volume: 250,
-            weight: null
-          });
-
-        if (insertError) {
-          console.error('Erro ao criar configurações padrão:', insertError);
-          throw insertError;
-        }
-
-        console.log('Configurações padrão criadas');
-        await useWaterStore.getState().loadHistory();
+        await get().updateSettings(DEFAULT_SETTINGS);
       }
+
+      await useWaterStore.getState().loadHistory();
     } catch (error) {
-      console.error('Erro ao carregar configurações do usuário:', error);
+      console.error('Erro ao carregar configurações:', error);
+    }
+  },
+
+  updateSettings: async (newSettings: Partial<UserSettings>) => {
+    const { user, settings } = get();
+    if (!user) return;
+
+    try {
+      const updatedSettings = { ...DEFAULT_SETTINGS, ...settings, ...newSettings };
+      const { error } = await supabase
+        .from('user_settings')
+        .upsert({ 
+          user_id: user.id,
+          ...updatedSettings
+        });
+
+      if (error) throw error;
+
+      set({ settings: updatedSettings as UserSettings });
+      
+      // Atualiza o WaterStore conforme necessário
+      const waterStore = useWaterStore.getState();
+      if (newSettings.daily_goal) waterStore.setDailyGoal(newSettings.daily_goal);
+      if (newSettings.selected_pet) waterStore.setSelectedPet(newSettings.selected_pet);
+      if (newSettings.cup_volume) waterStore.setCupVolume(newSettings.cup_volume);
+      if (newSettings.weight) waterStore.setWeight(newSettings.weight);
+    } catch (error) {
+      console.error('Erro ao atualizar configurações:', error);
     }
   }
 }))
