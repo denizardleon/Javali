@@ -135,7 +135,7 @@ export const Settings: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-primary flex flex-col">
-      {/* Header with back button */}
+      {/* Cabeçalho com botão de voltar */}
       <div className="absolute top-0 left-0 p-4">
         <IconButton 
           onClick={() => navigate('/dashboard')}
@@ -144,12 +144,12 @@ export const Settings: React.FC = () => {
         />
       </div>
   
-      {/* Virtual Pet */}
+      {/* Pet Virtual */}
       <div className="flex flex-col items-center pt-8 pb-4">
         <VirtualPet size="large" />
       </div>
 
-      {/* Settings Section */}
+      {/* Seção de Configurações */}
       <div className="bg-gray-300 px-4 pt-5 pb-20">
         <div className="mb-2 w-[80%] mx-auto">
           <SettingsTitle className="text-left">Configurações</SettingsTitle>
@@ -175,7 +175,7 @@ export const Settings: React.FC = () => {
         </div>
       </div>
   
-      {/* Modals */}
+      {/* Modais */}
       <PetSelectionModal
         isOpen={isPetModalOpen}
         onClose={() => setIsPetModalOpen(false)}
