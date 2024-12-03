@@ -19,9 +19,9 @@
 }
 
 :root {
-  --primary: #40E0D0;
-  --primary-dark: #2CC1B3;
-  --secondary: #FFFFFF;
+  --primary: #00B4C5;
+  --primary-dark: #00737E;
+  --secondary: #00575F;
   --background: linear-gradient(180deg, var(--primary) 0%, #87CEEB 100%);
 }
 
