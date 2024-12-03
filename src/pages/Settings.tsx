@@ -45,7 +45,7 @@ const SettingsItem: React.FC<SettingsItemProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`w-[80%] mx-auto py-3 px-3 flex items-center justify-between bg-white shadow hover:shadow-md transition-shadow ${roundedClasses}`}
+      className={`w-[90%] mx-auto py-3 px-3 flex items-center justify-between bg-white shadow hover:shadow-md transition-shadow ${roundedClasses}`}
     >
       <div className="flex items-center gap-3">
         <div className="text-turquoise-500">
@@ -78,7 +78,7 @@ export const Settings: React.FC = () => {
   const settingsGroups = [
     // Grupo 1: Seleção de Pet
     [{
-      icon: <Cat className="w-6 h-6" />,
+      icon: <Cat className="w-8 h-" />,
       title: "Selecionar Pet",
       subtitle: "Escolha seu companheiro virtual",
       onClick: () => setIsPetModalOpen(true)
@@ -134,8 +134,8 @@ export const Settings: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-primary">
-      {/* Cabeçalho com botão de voltar */}
+    <div className="min-h-screen bg-gradient-primary flex flex-col">
+      {/* Header with back button */}
       <div className="absolute top-0 left-0 p-4">
         <IconButton 
           onClick={() => navigate('/dashboard')}
@@ -143,20 +143,19 @@ export const Settings: React.FC = () => {
           className="text-white"
         />
       </div>
-
-          <div className="flex flex-col items-center pt-8 pb-4">
+  
+      {/* Virtual Pet */}
+      <div className="flex flex-col items-center pt-8 pb-4">
         <VirtualPet size="large" />
       </div>
 
-      {/* Seção de Configurações */}
+      {/* Settings Section */}
       <div className="bg-gray-300 px-4 pt-5 pb-20">
         <div className="mb-2 w-[80%] mx-auto">
-          <SettingsTitle className="text-left">
-            Configurações
-          </SettingsTitle>
+          <SettingsTitle className="text-left">Configurações</SettingsTitle>
         </div>
-
-        <div className="space-y-4 max-h-[calc(100vh-400px)] overflow-y-auto">
+  
+        <div className="space-y-4">
           {settingsGroups.map((group, groupIndex) => (
             <div key={groupIndex} className="space-y-[1px]">
               {group.map((item, itemIndex) => (
@@ -175,8 +174,8 @@ export const Settings: React.FC = () => {
           ))}
         </div>
       </div>
-
-      {/* Modais */}
+  
+      {/* Modals */}
       <PetSelectionModal
         isOpen={isPetModalOpen}
         onClose={() => setIsPetModalOpen(false)}
