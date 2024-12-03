@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.watertracker.app',
-  appName: 'Water Tracker',
+  appName: 'JavaLi',
   webDir: 'dist',
   server: {
     androidScheme: 'https'

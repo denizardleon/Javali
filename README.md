@@ -13,8 +13,7 @@ App moderno para acompanhamento do consumo diário de água, com um companheiro 
 
 - **Pet Virtual**
   - Escolha entre Capivara ou Gato como seu companheiro
-  - Acompanha seu progresso e reage ao seu consumo de água
-  - Animações interativas
+  - Acompanha seu progresso e muda o status de acordo com o consumo de água
 
 - **Interface Moderna**
   - Design responsivo e intuitivo
@@ -71,8 +70,8 @@ src/
 
 1. Clone o repositório
 ```bash
-git clone https://github.com/seu-usuario/java-li.git
-cd java-li
+git clone https://github.com/denizardleon/Javali.git
+cd javali
 ```
 
 2. Instale as dependências
@@ -108,7 +107,6 @@ npm run dev
 - Volume do copo padrão
 - Seleção de pet virtual
 - Preferências de notificação (em desenvolvimento)
-- Modo noturno (em desenvolvimento)
 - Idiomas (em desenvolvimento)
 
 ## 🔄 Estado da Aplicação
