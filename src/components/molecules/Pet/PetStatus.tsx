@@ -34,7 +34,7 @@ export const PetStatus: React.FC = () => {
       return {
         mood: 'normal',
         statusText: 'PRONTO\nPRA\nCOMEÇAR',
-        streakText: 'Bem-vindo ao\nJavali!',
+        streakText: 'Bem-vindo ao\nJava-li!',
         streakValue: null
       };
     }
